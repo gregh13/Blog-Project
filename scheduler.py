@@ -108,7 +108,9 @@ if percent_change >= 0 or percent_change <= 0:
     top_3_snippets = [x["snippet"] for x in stock_news["data"][:3]]
     first_snippet = top_3_snippets[0]
     second_snippet = top_3_snippets[1]
-
+    print("\n\nMESSAGE:\n\n")
+    print(f"Subject:Hello! It's Stock Time: {post_title} :D\n\nPrice: {sms_num}\nSnippet1: {first_snippet}")
+    print("\n\nEND\n\n:")
     with smtplib.SMTP("smtp.gmail.com") as connection:
         connection.starttls()
         connection.login(MY_EMAIL, MY_PASSWORD)
