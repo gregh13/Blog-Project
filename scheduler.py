@@ -1,19 +1,61 @@
 import requests
 import smtplib
 
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
+import os
+
+Base = declarative_base()
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'SECRET_KEY'
+
+uri = os.getenv("DATABASE_URL")
+if uri and uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+
+class BlogPost(db.Model, Base):
+    __tablename__ = "blog_posts"
+    id = db.Column(db.Integer, primary_key=True)
+    # Can name these whatever, just need to be consistent
+    # Create Foreign Key, "users.id" the users refers to the tablename of User.
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    # Create reference to the User object, the "posts" refers to the posts property in the User class.
+    author = relationship("User", back_populates="posts")
+    # Change schema to have ORM relationship
+    # author = db.Column(db.String(250), nullable=False)
+    comments = relationship("Comment", back_populates="parent_post")
+
+    title = db.Column(db.String(250), unique=True, nullable=False)
+    subtitle = db.Column(db.String(250), nullable=False)
+    date = db.Column(db.String(250), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    img_url = db.Column(db.String(250), nullable=False)
+
+
+post = BlogPost.query.filter_by(id=2).first()
+post_title = post.title
+
+
 MY_EMAIL = "pythonnoob222@gmail.com"
 MY_PASSWORD = "Udemy2022!"
 
 STOCK_PRICE_API_KEY = "O56AP5TQVQ5BAZUG"
 parameters_price = {
     "function": "TIME_SERIES_DAILY",
-    "symbol": "FB",
+    "symbol": post_title,
     "apikey": STOCK_PRICE_API_KEY
 }
 
 STOCK_NEWS_API_KEY = "OUbYDfahrs8Rc5gUtEBWtia3pX1MsrlOTH8rvijd"
 parameters_news = {
-    "symbols": "FB",
+    "symbols": post_title,
     "language": "en",
     "filter_entities": "true",
     "api_token": STOCK_NEWS_API_KEY
