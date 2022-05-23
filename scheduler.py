@@ -42,7 +42,6 @@ class BlogPost(db.Model, Base):
 post = BlogPost.query.filter_by(id=2).first()
 post_title = post.title
 
-
 MY_EMAIL = "pythonnoob222@gmail.com"
 MY_PASSWORD = "Udemy2022!"
 
@@ -89,5 +88,5 @@ if percent_change >= 0 or percent_change <= 0:
         connection.starttls()
         connection.login(MY_EMAIL, MY_PASSWORD)
         connection.sendmail(from_addr=MY_EMAIL, to_addrs=MY_EMAIL,
-                            msg=f"Subject:Hello! It's Flight Deal Time :)\n\nSnippet1: {first_snippet}"
+                            msg=f"Subject:Hello! It's Stock Time: {post_title} :D\n\nPrice: {sms_num}\nSnippet1: {first_snippet}"
                             )
