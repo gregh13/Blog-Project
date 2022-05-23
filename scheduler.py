@@ -2,8 +2,6 @@ import requests
 from twilio.rest import Client
 
 
-
-
 TWILIO_SID = "AC8bc707c746ed8ab418ed99dd5d237569"
 TWILIO_TOKEN = "02611c2364d604e7e9e16816f7b675ef"
 TWILIO_PHONE = "+17402400638"
