@@ -1,11 +1,9 @@
 import requests
-from twilio.rest import Client
+import smtplib
 
+MY_EMAIL = "pythonnoob222@gmail.com"
+MY_PASSWORD = "Udemy2022!"
 
-TWILIO_SID = "AC8bc707c746ed8ab418ed99dd5d237569"
-TWILIO_TOKEN = "02611c2364d604e7e9e16816f7b675ef"
-TWILIO_PHONE = "+17402400638"
-PHONE_NUM = "+66991132024"
 STOCK_PRICE_API_KEY = "O56AP5TQVQ5BAZUG"
 parameters_price = {
     "function": "TIME_SERIES_DAILY",
@@ -45,18 +43,9 @@ if percent_change >= 0 or percent_change <= 0:
     first_snippet = top_3_snippets[0]
     second_snippet = top_3_snippets[1]
 
-    account_sid = TWILIO_SID
-    auth_token = TWILIO_TOKEN
-    client = Client(account_sid, auth_token)
-    message = client.messages \
-        .create(
-        body=f"---------\n\n{parameters_news['symbols']}: {sms_num}   "
-             f"\nLatest Close Price: ${two_day_close_list[0]}   "
-             f"\nDay Early Close: ${two_day_close_list[1]}   "
-             f"\n--------\n"
-             f"Snippet1: {first_snippet}"
-             f"\n--------\n"
-             f"Snippet2: {second_snippet}",
-        from_=TWILIO_PHONE,
-        to=PHONE_NUM,
-    )
+    with smtplib.SMTP("smtp.gmail.com") as connection:
+        connection.starttls()
+        connection.login(MY_EMAIL, MY_PASSWORD)
+        connection.sendmail(from_addr=MY_EMAIL, to_addrs=MY_EMAIL,
+                            msg=f"Subject:Hello! It's Flight Deal Time :)\n\nSnippet1: {first_snippet}"
+                            )
